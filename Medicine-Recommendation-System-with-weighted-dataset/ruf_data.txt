@@ -1,0 +1,120 @@
+def diagnosisGemini(finalSym, predicted_disease):
+    """Generates a JSON object listing the primary predicted disease along with other possible diseases(maximum 5),
+    descriptions, precautions, workouts, medications, and diets for user interface display in a Health Consultancy project.
+
+    Args:
+        finalSym: A list or string of symptoms provided by the user.
+        predicted_disease: A specific disease to include in the response, with its description.
+
+    Returns:
+        A JSON string with fields for disease, disease_description, precautions, workout, medications, and diets."""
+
+    # Adjusted prompt with inclusion of predicted_disease
+    prompt = (
+        f"Based on the symptoms provided: {finalSym}, return a JSON object in the following format:\n"
+        "{\n"
+        "  'possible_diseases': [\n"
+        "    { 'name': '" + predicted_disease + "', 'description': 'Description of " + predicted_disease + "' },\n"
+        "    { 'name': 'Disease2', 'description': 'Description of Disease2' },\n"
+        "    { 'name': 'Disease3', 'description': 'Description of Disease3' },\n"
+        "    { 'name': 'Disease4', 'description': 'Description of Disease4' }\n"
+        "  ],\n"
+        "  'precautions': ['Precaution1', 'Precaution2'],\n"
+        "  'workout': ['Suggestion1', 'Suggestion2'],\n"
+        "  'medications': ['Medication1', 'Medication2'],\n"
+        "  'diets': ['Diet1', 'Diet2']\n"
+        "}\n"
+        "Make sure that the predicted disease is included along with other diseases that could match the symptoms."
+    )
+
+    # Calling the Gemini model
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(prompt)
+
+    return response.text
+
+
+{
+  "possible_diseases": [
+    {
+      "name": "Drug Reaction",
+      "description": "An adverse reaction to a medication, which can manifest as stomach pain among other symptoms."
+    },
+    {
+      "name": "Food Poisoning",
+      "description": "Caused by consuming contaminated food or drink, often leading to stomach cramps and pain."
+    },
+    {
+      "name": "Gastroenteritis",
+      "description": "Inflammation of the stomach and intestines, commonly caused by a viral or bacterial infection."
+    },
+    {
+      "name": "Irritable Bowel Syndrome (IBS)",
+      "description": "A chronic disorder affecting the large intestine, causing stomach pain, bloating, and changes in bowel habits."
+    },
+    {
+      "name": "Peptic Ulcer",
+      "description": "A sore on the lining of the stomach or duodenum, often causing burning stomach pain."
+    }
+  ],
+  "precautions": [
+    "Consult a doctor immediately if stomach pain is severe or persistent.",
+    "Maintain good hygiene practices, especially when handling food.",
+    "Stay hydrated by drinking plenty of fluids.",
+    "Avoid known trigger foods if you have IBS."
+  ],
+  "workout": [
+    "Light walking or cycling can help improve digestion.",
+    "Gentle stretching exercises can relieve abdominal discomfort."
+  ],
+  "medications": [
+    "Over-the-counter antacids can help neutralize stomach acid.",
+    "Pain relievers like ibuprofen or acetaminophen can provide temporary pain relief."
+  ],
+  "diets": [
+    "Eat bland foods like rice, toast, and bananas to soothe the stomach.",
+    "Avoid fatty, spicy, or acidic foods that can irritate the stomach lining."
+  ]
+}
+
+
+==================================================================================================
+                              Model Code for Weighted Dataset
+==================================================================================================
+
+# import pandas as pd
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import LabelEncoder
+# from sklearn.ensemble import RandomForestClassifier
+# from joblib import dump
+# from sklearn.preprocessing import StandardScaler
+
+# # Load the dataset
+# dataset = pd.read_csv('dataset/Training.csv')
+
+# # Separate features, target, and weights
+# symptoms_col = dataset.drop(['prognosis', 'sample_weights'], axis=1)  # Drop prognosis and sample_weight columns for X
+# disease_col = dataset['prognosis']
+
+# # Scale features for model compatibility
+# scaler = StandardScaler()
+# X_scaled = scaler.fit_transform(symptoms_col)
+
+# # Encode prognosis labels
+# le = LabelEncoder()
+# le.fit(disease_col)
+# labeled_diseases = le.transform(disease_col)
+
+# # Split data into training and testing sets
+# X_train, X_test, y_train, y_test = train_test_split(X_scaled, labeled_diseases, test_size=0.2, random_state=42)
+
+# # Define and train the model with weights
+# RandomForest = RandomForestClassifier(n_estimators=100, random_state=42)
+# RandomForest.fit(X_train, y_train)
+
+# # Save the trained model
+# dump(RandomForest, 'updateWeightedRandomForest.joblib')
+
+
+# ==================================================================
+# ==================================================================

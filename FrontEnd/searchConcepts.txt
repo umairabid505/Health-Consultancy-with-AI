@@ -1,0 +1,3 @@
+symptoms component
+about line 8
+HealthTest line 210
